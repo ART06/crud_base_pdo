@@ -1,6 +1,6 @@
-/* Variáveis recorrentes (ou fixas sei la) */
+/* Variáveis */
 :root {
-  /* 1. Primária (Natureza) */
+  /* 1. Primária (Natureza / "Musgo") */
   --verde-eco: #5a7d3c;
   --verde-eco-hover: #4a6830;
 
@@ -12,19 +12,28 @@
   --amarelo-acao: #f39c12;
   --amarelo-acao-hover: #e67e22;
 
-  /* 4. Excluir e voltar */
+  /* 4. Excluir */
   --vermelho-perigo: #e74c3c;
   --vermelho-perigo-hover: #c0392b;
+
+  /* 5. Voltar */
   --cinza-voltar: #7f8c8d;
   --cinza-voltar-hover: #95a5a6;
 
-  /* 5. Neutros (Layout e Texto) */
-  --fundo-pagina: #fdfbf5;
+  /* 6. Neutros (Layout e Texto) */
+  --fundo-pagina: #f4f7f6;
   --fundo-container: #ffffff;
-  --borda-comum: #dde3e0; /* Cinza levemente esverdeado */
+  --borda-comum: #dde3e0;
 
   --texto-titulo: #2c3e50;
-  --texto-comum: #4e4e4e;
+  --texto-comum: #555755;
+}
+
+/* Reset básico e fontes */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
@@ -34,6 +43,7 @@ body {
   line-height: 1.6;
 }
 
+/* Container principal (Aplicado em todas as páginas) */
 .container {
   max-width: 1100px;
   margin: 20px auto;
@@ -43,7 +53,7 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* Header */
+/* Cabeçalho principal */
 .cabecalho-principal {
   display: flex;
   align-items: center;
@@ -66,7 +76,8 @@ body {
   color: #ffffff;
   margin-bottom: 0;
 }
-/* Estilo padrão universal dos botões */
+
+/* Botões (Estilo Padrão) */
 .button,
 button,
 input[type="submit"] {
@@ -75,7 +86,7 @@ input[type="submit"] {
   font-size: 1em;
   font-weight: 500;
   color: #fff;
-  background-color: var(--azul-clean); /* Cor padrão */
+  background-color: var(--azul-clean); /* Cor padrão dos botões */
   border: none;
   border-radius: 5px;
   text-decoration: none;
@@ -88,25 +99,68 @@ button:hover,
 input[type="submit"]:hover {
   background-color: var(--azul-clean-hover);
 }
+/* PADRONIZAÇÃO DOS BOTÕES */
 
-/* Botão de "Novo" e "Salvar" (Cor de Ação) */
-.button.new,
-.button.save,
-.save {
+/* Botões de criar/confirmar ação */
+.button.create {
+  background-color: var(--verde-eco);
+}
+.button.create:hover {
+  background-color: var(--verde-eco-hover);
+}
+/* Botões de salvar ação */
+.button.save {
   background-color: var(--amarelo-acao);
 }
-.button.new:hover,
-.button.save:hover,
-.save:hover {
+.button.save:hover {
   background-color: var(--amarelo-acao-hover);
 }
-
+/* Botões de cancelar ação */
+.button.cancel {
+  background-color: var(--cinza-voltar);
+}
+.button.cancel:hover {
+  background-color: var(--cinza-voltar-hover);
+}
+/* Botões de "perigo" */
 .button.danger {
   background-color: var(--vermelho-perigo);
 }
 .button.danger:hover {
   background-color: var(--vermelho-perigo-hover);
 }
+
+/* Estilo global do Forms */
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  border: 1px solid var(--borda-comum);
+  border-radius: 5px;
+  transition: border-color 0.2s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  border-color: var(--azul-clean);
+  outline: none;
+}
+
+/* Caixa de erro (forms) */
+.errors {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid var(--vermelho-perigo);
+  background-color: #fef2f2;
+  color: #c0392b;
+  border-radius: 5px;
+}
+.errors strong {
+  display: block;
+}
+
+/* Barra de Navegação (Busca) */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -138,12 +192,17 @@ input[type="submit"]:hover {
   font-size: 1em;
   border: 1px solid var(--borda-comum);
 }
+.navbar .busca .search-wrapper input:focus {
+  border-color: var(--azul-clean);
+  outline: none;
+}
 
 .navbar .busca button {
   border-radius: 0 5px 5px 0;
   flex-shrink: 0;
 }
 
+/* Ícone 'X' de Limpar Busca */
 .navbar .busca .cancel-icon {
   position: absolute;
   display: none;
@@ -151,15 +210,14 @@ input[type="submit"]:hover {
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  color: var(--cinza-voltar);
-}
-
-.navbar .busca .cancel-icon:hover {
-  background-color: rgba(150, 150, 150, 0.4);
+  color: rgba(162, 162, 162);
   border-radius: 50%;
 }
+.navbar .busca .cancel-icon:hover {
+  background-color: rgba(162, 162, 162, 0.4);
+}
 
-/* Tabela */
+/* Tabela de Dados */
 .tabela-dados {
   width: 100%;
   border-collapse: collapse;
@@ -169,9 +227,10 @@ input[type="submit"]:hover {
 .tabela-dados th,
 .tabela-dados td {
   padding: 12px 15px;
-  text-align: left;
+  text-align: center;
   border-bottom: 1px solid var(--borda-comum);
-  vertical-align: top;
+  vertical-align: middle;
+  text-transform: uppercase;
 }
 
 .tabela-dados th {
@@ -193,7 +252,8 @@ input[type="submit"]:hover {
   margin-right: 8px;
 }
 
-.modal-overlay {
+/* "Popup" de Confirmação de Exclusão */
+.popup-overlay {
   display: none;
   position: fixed;
   z-index: 1000;
@@ -207,7 +267,7 @@ input[type="submit"]:hover {
   align-items: center;
 }
 
-.modal-content {
+.popup-content {
   background-color: var(--fundo-container);
   margin: auto;
   padding: 25px;
@@ -218,36 +278,24 @@ input[type="submit"]:hover {
   animation: slide-down 0.3s ease-out;
 }
 
-.modal-content h2 {
+.popup-content h2 {
   color: var(--texto-titulo);
   margin-top: 0;
 }
 
-.modal-content p {
+.popup-content p {
   color: var(--texto-comum);
   margin-bottom: 25px;
   font-size: 1.1em;
   line-height: 1.5;
 }
-.modal-actions {
+
+.popup-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
 }
 
-.modal-actions .button.cancel {
-  background-color: var(--cinza-voltar);
-}
-.modal-actions .button.cancel:hover {
-  background-color: var(--cinza-voltar-hover);
-}
-
-.modal-actions .button.danger {
-  background-color: var(--vermelho-perigo);
-}
-.modal-actions .button.danger:hover {
-  background-color: var(--vermelho-perigo-hover);
-}
 @keyframes slide-down {
   from {
     transform: translateY(-50px);

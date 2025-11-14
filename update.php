@@ -7,7 +7,6 @@ if ($id <= 0) {
   header('Location:index.php');
   exit;
 }
-
 $cols = implode(',', array_map(fn ($c) => $c['name'], $COLUMNS));
 $stmt = $pdo->prepare("SELECT id,{$cols} FROM {$TABLE} WHERE id=:id");
 $stmt->execute([':id' => $id]);
@@ -17,19 +16,27 @@ if (!$cur) {
   exit;
 }
 $errors = [];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $sql = buildUpdateSQL($TABLE, $COLUMNS);
-  $stmt = $pdo->prepare($sql);
-  $bind = [':id' => $id];
   foreach ($COLUMNS as $c) {
-    $bind[':' . $c['name']] = $_POST[$c['name']] ?? null;
+    if (empty($_POST[$c['name']])) {
+      $errors[] = "O campo '{$c['label']}' é obrigatório.";
+    }
   }
-  try {
-    $stmt->execute($bind);
-    header('Location:index.php');
-    exit;
-  } catch (Throwable $e) {
-    $errors[] = $e->getMessage();
+  if (empty($errors)) {
+    $sql = buildUpdateSQL($TABLE, $COLUMNS);
+    $stmt = $pdo->prepare($sql);
+    $bind = [':id' => $id];
+    foreach ($COLUMNS as $c) {
+      $bind[':' . $c['name']] = $_POST[$c['name']] ?? null;
+    }
+    try {
+      $stmt->execute($bind);
+      header('Location:index.php');
+      exit;
+    } catch (Throwable $e) {
+      $errors[] = $e->getMessage();
+    }
   }
 }
 ?>
@@ -43,11 +50,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   
   <link rel="stylesheet" href="assets/style.css" />
   <link rel="stylesheet" href="assets/formsStyle.css" />
-  <link rel="stylesheet" href="assets/updateStyle.css" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <script src="assets/script.js" defer></script>
 </head>
 
 <body>
@@ -64,7 +72,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     <?php endif; ?>
 
-    <form class="formulario-cadastro" method="post">
+    <div id="js-error-message" class="errors" style="display:none; background-color: #fff0f0; border-color: #e74c3c; color: #c0392b;"></div>
+
+    <form class="formulario-cadastro" method="post" onsubmit="return validateForm(event)">
       
       <?php foreach ($COLUMNS as $c) : ?>
         <div class="campo-form">
@@ -75,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             name="<?php echo h($c['name']); ?>" 
             step="<?php echo h($c['step'] ?? ''); ?>" 
             value="<?php echo h($cur[$c['name']]); ?>"
-            required>
+            >
         </div>
       <?php endforeach; ?>
 

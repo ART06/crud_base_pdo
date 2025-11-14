@@ -6,6 +6,7 @@ $search = $_GET['q'] ?? '';
 $where = '';
 $params = [];
 
+// Lógica para montar a busca no banco de dados
 if ($search !== '') {
   $like = [];
   foreach ($COLUMNS as $c) {
@@ -15,6 +16,7 @@ if ($search !== '') {
   $params[':q'] = "%{$search}%";
 }
 
+// Prepara e executa a consulta no banco
 $sql = "SELECT id," . implode(',', array_map(fn($c) => $c['name'], $COLUMNS)) . " FROM {$TABLE} {$where} ORDER BY id DESC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
@@ -29,11 +31,11 @@ $rows = $stmt->fetchAll();
   <title>Site de Coleta Seletiva</title>
   
   <link rel="stylesheet" href="assets/style.css" />
-  <link rel="stylesheet" href="assets/mainStyle.css" />
-
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
   <script src="script.js" defer></script>
 </head>
 
@@ -47,7 +49,6 @@ $rows = $stmt->fetchAll();
 
     <div class="navbar">
       <form class="busca" method="get">
-        
         <div class="search-wrapper">
           <input 
             type="text" 
@@ -68,11 +69,11 @@ $rows = $stmt->fetchAll();
             <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
           </svg>
         </div>
-        
         <button type="submit" class="button">Buscar</button>
       </form>
-      <a href="insert.php" class="button new"> + Novo Registro</a>
+      <a href="insert.php" class="button save"> + Novo Registro</a>
     </div>
+
     <table class="tabela-dados">
       <thead>
         <tr>
@@ -97,28 +98,33 @@ $rows = $stmt->fetchAll();
               <?php endforeach; ?>
               <td>
                 <a class="button" href="update.php?id=<?php echo h($r['id']); ?>">Editar</a>
+                
                 <a 
-                class="button danger" 
-                href="delete.php?id=<?php echo h($r['id']); ?>"
-                onclick="confirmDelete(event, this.href, '<?php echo h($r['bairro']); ?>')">
-                Excluir
-              </a>
+                  class="button danger" 
+                  href="delete.php?id=<?php echo h($r['id']); ?>" 
+                  onclick="confirmDelete(event, this.href, '<?php echo h($r['bairro']); ?>')">
+                  Excluir
+                </a>
               </td>
             </tr>
           <?php endforeach; ?>
         <?php endif; ?>
       </tbody>
     </table>
-  </div><div id="delete-modal" class="modal-overlay">
-    <div class="modal-content">
-      <h2 id="modal-delete-title">Confirmar Exclusão</h2>
-      <p id="modal-delete-text">Tem certeza?</p>
+  </div>
+
+  <div id="delete-popup" class="popup-overlay">
+    <div class="popup-content">
+      <h2>Confirmar Exclusão</h2>
+      <p id="popup-delete-text">Tem certeza?</p>
       
-      <div class="modal-actions">
-        <a id="modal-confirm-delete" class="button danger" href="#">Confirmar Exclusão</a>
-        <button class="button cancel" onclick="closeDeleteModal()">Cancelar</button>
+      <div class="popup-actions">
+        <a id="popup-confirm-delete" class="button danger" href="#">Confirmar Exclusão</a>
+        <button class="button cancel" onclick="closeDeletepopup()">Cancelar</button>
       </div>
     </div>
   </div>
+
+  <script src="assets/script.js" defer></script>
 </body>
 </html>

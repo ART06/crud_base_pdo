@@ -2,19 +2,27 @@
 require_once __DIR__ . '/connection.php';
 require_once __DIR__ . '/functions.php';
 $errors = [];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $sql = buildInsertSQL($TABLE, $COLUMNS);
-  $stmt = $pdo->prepare($sql);
-  $bind = [];
   foreach ($COLUMNS as $c) {
-    $bind[':' . $c['name']] = $_POST[$c['name']] ?? null;
+    if (empty($_POST[$c['name']])) {
+      $errors[] = "O campo '{$c['label']}' é obrigatório.";
+    }
   }
-  try {
-    $stmt->execute($bind);
-    header('Location: index.php');
-    exit;
-  } catch (Throwable $e) {
-    $errors[] = $e->getMessage();
+  if (empty($errors)) {
+    $sql = buildInsertSQL($TABLE, $COLUMNS);
+    $stmt = $pdo->prepare($sql);
+    $bind = [];
+    foreach ($COLUMNS as $c) {
+      $bind[':' . $c['name']] = $_POST[$c['name']] ?? null;
+    }
+    try {
+      $stmt->execute($bind);
+      header('Location: index.php');
+      exit;
+    } catch (Throwable $e) {
+      $errors[] = $e->getMessage();
+    }
   }
 }
 ?>
@@ -28,11 +36,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   
   <link rel="stylesheet" href="assets/style.css" />
   <link rel="stylesheet" href="assets/formsStyle.css" />
-  <link rel="stylesheet" href="assets/createStyle.css" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <script src="assets/script.js" defer></script>
 </head>
 
 <body>
@@ -48,8 +57,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <strong>Erro:</strong> <?php echo h(implode(' | ', $errors)); ?>
       </div>
     <?php endif; ?>
+    
+    <div id="js-error-message" class="errors" style="display:none; background-color: #fff0f0; border-color: #e74c3c; color: #c0392b;"></div>
 
-    <form class="formulario-cadastro" method="post">
+
+    <form class="formulario-cadastro" method="post" onsubmit="return validateForm(event)">
       
       <?php foreach ($COLUMNS as $c) : ?>
         <div class="campo-form">
@@ -58,16 +70,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             type="<?php echo h($c['type'] ?? 'text'); ?>" 
             id="<?php echo h($c['name']); ?>" 
             name="<?php echo h($c['name']); ?>" 
-            step="<?php echo h($c['step'] ?? ''); ?>" 
-            required>
+            step="<?php echo h($c['step'] ?? ''); ?>"
+            >
         </div>
       <?php endforeach; ?>
 
       <div class="acoes-form">
-        <button type="submit" class="button create">Criar</button>
-        <a href="index.php" class="button back">Voltar</a>
+        <button type="submit" class="button create">Salvar</button>
+        <a href="index.php" class="button cancel">Voltar</a>
       </div>
-      
     </form>
   </div>
 </body>

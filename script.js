@@ -1,9 +1,15 @@
+// --- Funções da Página Principal (index.php) ---
+
+// 1. Lógica do "X" de Limpar Busca
 function toggleClearIcon(input) {
   const icon = input.parentElement.querySelector(".cancel-icon");
-  if (input.value.length > 0) {
-    icon.style.display = "block";
-  } else {
-    icon.style.display = "none";
+  if (icon) {
+    // Verifica se o ícone existe
+    if (input.value.length > 0) {
+      icon.style.display = "block";
+    } else {
+      icon.style.display = "none";
+    }
   }
 }
 
@@ -18,53 +24,82 @@ function clearSearch(icon) {
   }
 }
 
-const modal = document.getElementById("delete-modal");
-const confirmButton = document.getElementById("modal-confirm-delete");
-const modalText = document.getElementById("modal-delete-text");
+// 2. Lógica do popup de Exclusão (Painel de Popup)
 
-function confirmDelete(event, deleteUrl, name) {
-  event.preventDefault();
-  modalText.textContent = `Tem certeza que deseja excluir o registro do bairro: "${name}"? Esta ação não pode ser desfeita.`;
-  confirmButton.href = deleteUrl;
-  modal.style.display = "flex";
-}
-function closeDeleteModal() {
-  modal.style.display = "none";
-  confirmButton.href = "#";
-}
+// Tenta encontrar os elementos do popup (IDs CORRIGIDOS)
+const popup = document.getElementById("delete-popup");
+const confirmButton = document.getElementById("popup-confirm-delete");
+const popupText = document.getElementById("popup-delete-text");
 
-window.onclick = function (event) {
-  if (event.target == modal) {
-    closeDeleteModal();
-  }
-};
-
-function validateForm(event) {
-  const form = event.target;
-  const inputs = form.querySelectorAll("input[name]");
-  const errorMessageDiv = document.getElementById("js-error-message");
-
-  let errors = [];
-
-  for (const input of inputs) {
-    if (input.value.trim() === "") {
-      const label = form.querySelector(`label[for="${input.id}"]`);
-      const labelText = label ? label.textContent.replace(":", "") : input.name;
-      errors.push(`O campo '${labelText}' é obrigatório.`);
-    }
-  }
-
-  if (errors.length > 0) {
+// SÓ executa o código do popup SE o popup existir nesta página
+if (popup && confirmButton && popupText) {
+  function confirmDelete(event, deleteUrl, name) {
     event.preventDefault();
-
-    errorMessageDiv.innerHTML =
-      "<strong>Por favor, corrija os erros:</strong><br>" + errors.join("<br>");
-    errorMessageDiv.style.display = "block";
-
-    inputs[0].focus();
-
-    return false;
+    popupText.textContent = `Tem certeza que deseja excluir o registro do bairro: "${name}"? Esta ação não pode ser desfeita.`;
+    confirmButton.href = deleteUrl;
+    popup.style.display = "flex";
   }
-  errorMessageDiv.style.display = "none";
-  return true;
+
+  function closeDeletepopup() {
+    popup.style.display = "none";
+    confirmButton.href = "#";
+  }
+
+  // Fecha o popup se clicar no fundo
+  window.onclick = function (event) {
+    if (event.target == popup) {
+      closeDeletepopup();
+    }
+  };
+}
+
+// --- Funções das Páginas de Formulário (insert.php / update.php) ---
+
+// 3. Lógica de Validação de Formulário
+
+// SÓ define a função 'validateForm' SE ela for necessária (nas páginas de form)
+const formDeCadastro = document.querySelector(".formulario-cadastro");
+if (formDeCadastro) {
+  function validateForm(event) {
+    const form = event.target;
+    // Tenta encontrar a div de erro
+    const errorMessageDiv = document.getElementById("js-error-message");
+
+    // SÓ executa a validação SE a div de erro existir nesta página
+    if (errorMessageDiv) {
+      const inputs = form.querySelectorAll("input[name]");
+      let errors = [];
+
+      for (const input of inputs) {
+        // Verifica se o campo está visível antes de validar (boa prática)
+        if (input.offsetParent !== null && input.value.trim() === "") {
+          const label = form.querySelector(`label[for="${input.id}"]`);
+          const labelText = label
+            ? label.textContent.replace(":", "")
+            : input.name;
+          errors.push(`O campo '${labelText}' é obrigatório.`);
+        }
+      }
+
+      if (errors.length > 0) {
+        event.preventDefault(); // Impede o envio do formulário
+
+        errorMessageDiv.innerHTML =
+          "<strong>Por favor, corrija os erros:</strong><br>" +
+          errors.join("<br>");
+        errorMessageDiv.style.display = "block";
+
+        if (inputs[0]) {
+          inputs[0].focus(); // Foca no primeiro campo
+        }
+        return false; // Falha na validação
+      }
+
+      errorMessageDiv.style.display = "none"; // Esconde erros (se tudo estiver OK)
+      return true; // Sucesso na validação
+    }
+
+    // Se a div de erro não existe, não faz nada e permite o envio
+    return true;
+  }
 }
