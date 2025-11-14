@@ -1,0 +1,13 @@
+.button.create {
+  background-color: var(--verde-eco);
+}
+.button.create:hover {
+  background-color: var(--verde-eco-hover);
+}
+.button.back {
+  background-color: var(--cinza-voltar);
+}
+
+.button.back:hover {
+  background-color: var(--cinza-voltar-hover);
+}

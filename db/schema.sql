@@ -1,0 +1,58 @@
+CREATE DATABASE IF NOT EXISTS minimundos CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE minimundos;
+CREATE TABLE IF NOT EXISTS consumo_residencial (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  bairro VARCHAR(80) NOT NULL,
+  hora TINYINT NOT NULL,
+  consumo_kwh INT NOT NULL,
+  residencias INT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS producao_industrial (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  dia INT NOT NULL,
+  horas_trabalhadas INT NOT NULL,
+  consumo_kwh INT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS paciente (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(120) NOT NULL,
+  idade INT NOT NULL,
+  imc DECIMAL(5,2) NOT NULL,
+  pressao_sistolica INT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS hospital (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(120) NOT NULL,
+  leitos INT NOT NULL,
+  atendimentos INT NOT NULL,
+  obitos INT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS chamado (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  categoria VARCHAR(40) NOT NULL,
+  tempo_resolucao INT NOT NULL,
+  turno VARCHAR(20) NOT NULL,
+  status VARCHAR(16) NOT NULL DEFAULT 'aberto'
+);
+CREATE TABLE IF NOT EXISTS api_log (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  hora TINYINT NOT NULL,
+  requisicoes INT NOT NULL,
+  erros INT NOT NULL,
+  latencia_ms INT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS qualidade_agua (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  rio VARCHAR(80) NOT NULL,
+  ph DECIMAL(3,1) NOT NULL,
+  coliformes INT NOT NULL,
+  turbidez INT NOT NULL,
+  regiao VARCHAR(40) NOT NULL
+);
+CREATE TABLE IF NOT EXISTS coleta_seletiva (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  bairro VARCHAR(80) NOT NULL,
+  tipo_residuo VARCHAR(40) NOT NULL,
+  peso_total DECIMAL(10,2) NOT NULL,
+  reciclavel DECIMAL(10,2) NOT NULL
+);

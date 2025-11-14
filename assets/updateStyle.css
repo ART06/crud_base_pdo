@@ -1,0 +1,7 @@
+.button.cancel {
+  background-color: var(--vermelho-perigo);
+}
+
+.button.cancel:hover {
+  background-color: var(--vermelho-perigo-hover);
+}
