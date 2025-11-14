@@ -1,6 +1,6 @@
-// --- Funções da Página Principal (index.php) ---
+// Funções da página principal (index.php)
 
-// 1. Lógica do "X" de Limpar Busca
+// Lógica do "X" de limpar busca
 function toggleClearIcon(input) {
   const icon = input.parentElement.querySelector(".cancel-icon");
   if (icon) {
@@ -24,7 +24,7 @@ function clearSearch(icon) {
   }
 }
 
-// 2. Lógica do popup de Exclusão (Painel de Popup)
+// 2. Lógica do popup de exclusão (painel de popup)
 
 // Tenta encontrar os elementos do popup (IDs CORRIGIDOS)
 const popup = document.getElementById("delete-popup");
@@ -53,9 +53,9 @@ if (popup && confirmButton && popupText) {
   };
 }
 
-// --- Funções das Páginas de Formulário (insert.php / update.php) ---
+// Funções das páginas de formulário (insert.php / update.php)
 
-// 3. Lógica de Validação de Formulário
+// Lógica de validação de formulário
 
 // SÓ define a função 'validateForm' SE ela for necessária (nas páginas de form)
 const formDeCadastro = document.querySelector(".formulario-cadastro");

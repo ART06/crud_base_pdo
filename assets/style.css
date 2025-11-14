@@ -1,14 +1,14 @@
 /* Variáveis */
 :root {
-  /* 1. Primária (Natureza / "Musgo") */
+  /* 1. Primária (natureza / "musgo") */
   --verde-eco: #5a7d3c;
   --verde-eco-hover: #4a6830;
 
-  /* 2. Secundária (Confiança / Limpeza) */
+  /* 2. Secundária (confiança / limpeza) */
   --azul-clean: #3498db;
   --azul-clean-hover: #2980b9;
 
-  /* 3. Ação (Destaque / Reciclagem) */
+  /* 3. Ação (destaque / reciclagem) */
   --amarelo-acao: #f39c12;
   --amarelo-acao-hover: #e67e22;
 
@@ -20,7 +20,7 @@
   --cinza-voltar: #7f8c8d;
   --cinza-voltar-hover: #95a5a6;
 
-  /* 6. Neutros (Layout e Texto) */
+  /* 6. Neutros (layout e texto) */
   --fundo-pagina: #f4f7f6;
   --fundo-container: #ffffff;
   --borda-comum: #dde3e0;
@@ -43,7 +43,7 @@ body {
   line-height: 1.6;
 }
 
-/* Container principal (Aplicado em todas as páginas) */
+/* Container principal (aplicado em todas as páginas) */
 .container {
   max-width: 1100px;
   margin: 20px auto;
@@ -77,7 +77,7 @@ body {
   margin-bottom: 0;
 }
 
-/* Botões (Estilo Padrão) */
+/* Botões (estilo padrão) */
 .button,
 button,
 input[type="submit"] {
@@ -130,7 +130,7 @@ input[type="submit"]:hover {
   background-color: var(--vermelho-perigo-hover);
 }
 
-/* Estilo global do Forms */
+/* Estilo global do forms */
 input[type="text"],
 input[type="number"] {
   width: 100%;
@@ -160,7 +160,7 @@ input[type="number"]:focus {
   display: block;
 }
 
-/* Barra de Navegação (Busca) */
+/* Barra de navegação (busca) */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -202,7 +202,7 @@ input[type="number"]:focus {
   flex-shrink: 0;
 }
 
-/* Ícone 'X' de Limpar Busca */
+/* Ícone 'X' de limpar busca */
 .navbar .busca .cancel-icon {
   position: absolute;
   display: none;
@@ -217,7 +217,7 @@ input[type="number"]:focus {
   background-color: rgba(162, 162, 162, 0.4);
 }
 
-/* Tabela de Dados */
+/* Tabela de dados */
 .tabela-dados {
   width: 100%;
   border-collapse: collapse;
@@ -252,7 +252,7 @@ input[type="number"]:focus {
   margin-right: 8px;
 }
 
-/* "Popup" de Confirmação de Exclusão */
+/* "Popup" de confirmação de exclusão */
 .popup-overlay {
   display: none;
   position: fixed;
